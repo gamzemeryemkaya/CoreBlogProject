@@ -42,5 +42,9 @@ namespace BusinessLayer.Concrete
         {
             _contactDal.Update(t);
         }
+        public void ContactAdd(Contact contact)
+        {
+            _contactDal.Insert(contact);
+        }
     }
 }
