@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccessLayer.Migrations
 {
-    [DbContext(typeof(ContextContext))]
+    [DbContext(typeof(Context))]
     [Migration("20230805085934_com_blog_relational")]
     partial class com_blog_relational
     {

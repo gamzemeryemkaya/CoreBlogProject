@@ -48,5 +48,10 @@ namespace BusinessLayer.Concrete
         {
             _commentDal.Update(t);
         }
+        public void CommentAdd(Comment comment)
+        {
+            _commentDal.Insert(comment);
+        }
+
     }
 }
