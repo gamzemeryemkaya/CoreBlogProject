@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Concrete;
 using CoreBlogProject.Models;
+using DataAccessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Authorization;
@@ -16,8 +17,14 @@ namespace CoreBlogProject.Controllers
     public class WriterController : Controller
     {
         WriterManager wm = new WriterManager(new EfWriterRepository());
+        [Authorize]
         public IActionResult Index()
         {
+            var userMail = User.Identity.Name;
+            ViewBag.v = userMail;
+            Context c = new Context();
+            var writerName = c.Writers.Where(x => x.WriterMail == userMail).Select(y => y.WriterName).FirstOrDefault();
+            ViewBag.v2 = writerName;
             return View();
         }
 
@@ -44,11 +51,13 @@ namespace CoreBlogProject.Controllers
             return PartialView();
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult WriterEditProfile()
         {
-            var writervalues = wm.TGetById(1);
+            Context c = new Context();
+            var userMail = User.Identity.Name;
+            var writerID = c.Writers.Where(x => x.WriterMail == userMail).Select(y => y.WriterID).FirstOrDefault();
+            var writervalues = wm.TGetById(writerID);
             return View(writervalues);
         }
 

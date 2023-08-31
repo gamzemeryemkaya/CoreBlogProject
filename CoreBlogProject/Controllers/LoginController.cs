@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace CoreBlogProject.Controllers
 {
-    public class LoginController : Controller
-    {
+	public class LoginController : Controller
+	{
 		[AllowAnonymous]
 		public IActionResult Index()
 		{
@@ -33,11 +33,11 @@ namespace CoreBlogProject.Controllers
 				{
 					new Claim(ClaimTypes.Name,p.WriterMail)
 			};
-                var useridentity = new ClaimsIdentity(claims, "a");
-                ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
-                await HttpContext.SignInAsync(principal);
-                return RedirectToAction("Index", "Writer");
-            }
+				var useridentity = new ClaimsIdentity(claims, "a");
+				ClaimsPrincipal principal = new ClaimsPrincipal(useridentity);
+				await HttpContext.SignInAsync(principal);
+				return RedirectToAction("Index", "Dashboard");
+			}
 			else
 			{
 				return View();

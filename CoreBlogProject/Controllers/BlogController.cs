@@ -14,12 +14,12 @@ using System.Threading.Tasks;
 
 namespace CoreBlogProject.Controllers
 {
-    [AllowAnonymous]
     public class BlogController : Controller
     {
         CategoryManager cm = new CategoryManager(new EfCategoryRepository());
         BlogManager bm = new BlogManager(new EfBlogRepository());
-        Context context = new Context();
+        Context c = new Context();
+
         public IActionResult Index()
         {
             var values = bm.GetBlogListWithCategory();
@@ -36,7 +36,9 @@ namespace CoreBlogProject.Controllers
 
         public IActionResult BlogListByWriter()
         {
-            var values = bm.GetListWithCategoryByWriterBm(1);
+            var userMail = User.Identity.Name;
+            var writerID = c.Writers.Where(x => x.WriterMail == userMail).Select(y => y.WriterID).FirstOrDefault();
+            var values = bm.GetListWithCategoryByWriterBm(writerID);
             return View(values);
         }
 
@@ -57,32 +59,28 @@ namespace CoreBlogProject.Controllers
         [HttpPost]
         public IActionResult BlogAdd(Blog p)
         {
+            var userMail = User.Identity.Name;
+            var writerID = c.Writers.Where(x => x.WriterMail == userMail).Select(y => y.WriterID).FirstOrDefault();
+
             BlogValidator bv = new BlogValidator();
             ValidationResult results = bv.Validate(p);
+
             if (results.IsValid)
             {
-                p.BlogStatus = true;
+                p.BlogStatus = true; //false yaparak admine onaylatabiliriz
                 p.BlogCreateDate = DateTime.Parse(DateTime.Now.ToLongDateString());
-                p.WriterID = 1;
+                p.WriterID = writerID;
                 bm.TAdd(p);
                 return RedirectToAction("BlogListByWriter", "Blog");
 
             }
             else
             {
-                ModelState.Clear();
                 foreach (var item in results.Errors)
                 {
                     ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
                 }
             }
-            //else
-            //{
-            //    foreach (var item in results.Errors)
-            //    {
-            //        ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-            //    }
-            //}
             return View();
         }
 
@@ -110,10 +108,13 @@ namespace CoreBlogProject.Controllers
         [HttpPost]
         public IActionResult EditBlog(Blog p)
         {
+            var userMail = User.Identity.Name;
+            var writerID = c.Writers.Where(x => x.WriterMail == userMail).Select(y => y.WriterID).FirstOrDefault();
+
             var blogValue = bm.TGetById(p.BlogID);
             p.BlogStatus = true;
             p.BlogCreateDate = DateTime.Parse(blogValue.BlogCreateDate.ToShortDateString());
-            p.WriterID = 1;
+            p.WriterID = writerID;
             bm.TUpdate(p);
             return RedirectToAction("BlogListByWriter");
         }

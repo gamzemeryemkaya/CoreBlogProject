@@ -15,5 +15,10 @@ namespace CoreBlogProject.Controllers
         {
             return View();
         }
+        public IActionResult AllNotification()
+        {
+            var values = nm.GetList();
+            return View(values);
+        }
     }
 }
