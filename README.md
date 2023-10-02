@@ -1,5 +1,5 @@
 
-# ASP.Net Core  Blog Projesi(Devam)
+# ASP.Net Core  Blog Projesi
 Bu proje, ASP.Net Core 5.0 kullanılarak geliştirilmiş bir Blog sitesidir. Proje, farklı teknolojileri ve konseptleri kapsayan kapsamlı bir uygulamayı temsil eder. Aşağıda proje hakkında temel bilgiler ve başlıkların bir özetini bulacaksınız.
 
 ## Proje Açıklaması
